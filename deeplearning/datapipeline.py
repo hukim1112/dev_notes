@@ -58,35 +58,37 @@ class_names_to_ids = dict(zip(class_names, range(len(class_names))))
 
 train_dataset = my_dataset_flow(training_filenames, 'train', class_names_to_ids)
 
-batchsize = 256
-nr_prefetch = 10
-nr_proc = 2
-
 ds = AugmentImageComponent(train_dataset, [imgaug.Resize((299, 299))])
 #ds = PrefetchData(ds, 1000, multiprocessing.cpu_count())
 '''중요한 점은, 데이터를 읽는 부분이나 rotation, flip, crop 등의 augmentation을 정의하고 이를 PrefetchData에 넘기면 필요한 부분을 여러 프로세스로 띄워서 처리해준다는 점입니다.'''
 
-
+batchsize = 256
 ds = BatchData(ds, batchsize, use_list=True)
+
+
+nr_prefetch = 10
+nr_proc = 2
 ds = PrefetchData(ds, nr_prefetch, nr_proc)
 
 TestDataSpeed(ds).start()
 j = 0
 for i in ds.get_data():
-   j += 1
-   print(i[1][0].__class__)
-
-
-placeholder = [tf.placeholder(dtype = tf.int8, shape=(None, 299, 299, 3)), 
-               tf.placeholder(dtype = tf.int8, shape=(None))]
-queue = tf.FIFOQueue(500, [x.dtype for x in placeholder])
+   print(np.array(i[0]).shape)
+   print(np.array(i[1]).shape)
+placeholder = [tf.placeholder(dtype = tf.uint8, shape=(None, 299, 299, 3)), 
+                   tf.placeholder(dtype = tf.uint8, shape=(None))]
+queue = tf.FIFOQueue(512, [x.dtype for x in placeholder])
 thread = EnqueueThread(queue, ds, placeholder)
+
+numberOfThreads = 1 
+qr = tf.train.QueueRunner(queue, [thread] * numberOfThreads)
+tf.train.add_queue_runner(qr) 
+
 tensors = queue.dequeue()
 
 sess = tf.Session()
 with sess.as_default():
-    thread.start()
-    for i in range(100):
-       imgs, labels = sess.run(tensors)
-       print(imgs.shape)
-       print(labels.shape)
+   thread.start()
+   coord = tf.train.Coordinator()
+   threads = tf.train.start_queue_runners(coord=coord)
+   imgs, labels = sess.run(tensors)
