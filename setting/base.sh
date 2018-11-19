@@ -11,14 +11,26 @@ cat >>.bashrc<<EOF
 export LC_ALL=C
 EOF
 
+
+sudo apt install mkvirtualenvwrapper
+
+# ~16.04
 cat >>$HOME/.bashrc<<EOF
 export WORKON_HOME=~/.virtualenvs
 . /usr/local/bin/virtualenvwrapper.sh
 EOF
 
+# ~18.04
+cat >>$HOME/.bashrc<<EOF
+export WORKON_HOME=~/.virtualenvs
+. $HOME/.local/bin/virtualenvwrapper.sh
+EOF
+
 source ~/.bashrc
 
 mkvirtualenv envname --python=python3
+
+workon envname
 
 pip3 install ipython
 pip3 install --upgrade --force-reinstall --no-cache-dir jupyter
