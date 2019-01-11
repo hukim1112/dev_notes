@@ -2,7 +2,7 @@ sudo apt-get update
 sudo apt-get upgrade
 
 sudo ln -sfn /usr/bin/python3.6 /usr/bin/python
-# change the default python version into 3.6
+# if you want to change the default python version into 3.6
 
 sudo apt-get install python3-dev
 sudo apt-get install python3-pip
@@ -11,19 +11,14 @@ cat >>.bashrc<<EOF
 export LC_ALL=C
 EOF
 
+sudo pip3 install virtualenv virtualenvwrapper
 
-sudo apt install mkvirtualenvwrapper
-
-# ~16.04
+# ~18.04, set the path to virtualenv program and python3
 cat >>$HOME/.bashrc<<EOF
 export WORKON_HOME=~/.virtualenvs
-. /usr/local/bin/virtualenvwrapper.sh
-EOF
-
-# ~18.04
-cat >>$HOME/.bashrc<<EOF
-export WORKON_HOME=~/.virtualenvs
-. $HOME/.local/bin/virtualenvwrapper.sh
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv
+source /usr/local/bin/virtualenvwrapper.sh
 EOF
 
 source ~/.bashrc
