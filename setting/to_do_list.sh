@@ -1,6 +1,6 @@
 
 chrome
-sublime
+sublime : https://itsfoss.com/sublime-text-3-linux/
 git
 
 
