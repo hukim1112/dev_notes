@@ -1,8 +1,7 @@
 
 chrome
-sublime : https://itsfoss.com/sublime-text-3-linux/
-jedi : https://packagecontrol.io/packages/Jedi%20-%20Python%20autocompletion
-
+atom : https://flight-manual.atom.io/getting-started/sections/installing-atom/
+	package : script, autocomplete-python, kite, python-autopep8, linter-flake8
 
 ---refer how to install tensorflow part ---
 gpu
