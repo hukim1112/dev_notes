@@ -117,4 +117,6 @@ if __name__=="__main__":
 
 #### 사용 예
 
-python ex_calc.py --op sub 1.2 2.2 -1.0
+python ex_calc.py --op sub 1.2 2.2
+
+=> -1.0
